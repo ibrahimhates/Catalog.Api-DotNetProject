@@ -19,7 +19,7 @@ namespace Catalog.Api.ContextFactory
 
             // Conntectionstring ver ve ardından migrationların oluşacağı katmanı belirle
             var builder = new DbContextOptionsBuilder<CatalogContext>()
-                .UseSqlServer(conn, p => p.MigrationsAssembly("CatalogApi"));
+                .UseSqlServer(conn, p => p.MigrationsAssembly("Catalog.Api"));
 
             // Ardından yeni bir context oluştur ve döndür
             return new CatalogContext(builder.Options);

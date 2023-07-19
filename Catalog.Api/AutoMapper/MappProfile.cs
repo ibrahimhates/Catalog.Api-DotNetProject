@@ -11,7 +11,7 @@ namespace Catalog.Api.AutoMapper
         {
             // Category Mapping
             CreateMap<Category, CategoryDto>();
-            CreateMap<CategoryDetailDto, Category>();
+            CreateMap<Category, CategoryDetailDto>();
             CreateMap<CategoryForInsertionDto, Category>();
             CreateMap<CategoryForUpdateDto, Category>();
 

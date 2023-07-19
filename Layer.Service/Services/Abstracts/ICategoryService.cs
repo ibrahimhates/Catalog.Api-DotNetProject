@@ -6,7 +6,7 @@ namespace Layer.Service.Services.Abstracts
     public interface ICategoryService
     {
         Task<(IEnumerable<CategoryDto>, PaginationMetaData)> GetAllCategoriesAsync(
-            FeatureParams productParams,bool trackChanges);
+            FeatureParams categoryParams,bool trackChanges);
         Task<CategoryDto> GetOneCategoryByIdAsync(int id, bool trackChanges);
         Task<CategoryDetailDto> GetOneCategoryByIdWithProductAsync(int id, bool trackChanges);
         Task<CategoryDto> CreateOneCategoryAsync(CategoryForInsertionDto categoryDto);

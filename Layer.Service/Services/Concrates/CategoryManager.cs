@@ -13,7 +13,6 @@ namespace Layer.Service.Services.Concrates
     {
         private readonly IRepositoryManager _manager;
         private readonly IMapper _mapper;
-
         public CategoryManager(IRepositoryManager manager, IMapper mapper)
         {
             _manager=manager;
@@ -36,6 +35,7 @@ namespace Layer.Service.Services.Concrates
             var metaData = CreateMetaDataForPagination(categoryParams, count);
             return (categoryDtos,metaData);
         }
+
         public async Task<CategoryDto> GetOneCategoryByIdAsync(int id, bool trackChanges)
         {
             var category = await GetOneCategoryCheckExistAsync(id,trackChanges);
@@ -44,7 +44,9 @@ namespace Layer.Service.Services.Concrates
 
             return categoryDto;
         }
-        public async Task<CategoryDetailDto> GetOneCategoryByIdWithProductAsync(int id, bool trackChanges)
+
+        public async Task<CategoryDetailDto> GetOneCategoryByIdWithProductAsync(
+            int id, bool trackChanges)
         {
             var category = await _manager
                 .CategoryRepository
@@ -58,10 +60,12 @@ namespace Layer.Service.Services.Concrates
             return categoryDetailDto;
         }
 
-        public async Task<CategoryDto> CreateOneCategoryAsync(CategoryForInsertionDto categoryDto)
+        public async Task<CategoryDto> CreateOneCategoryAsync(
+            CategoryForInsertionDto categoryDto)
         {
             var category = _mapper.Map<Category>(categoryDto);
 
+            category.CreatedDate = DateTime.Now;
             await _manager
                 .CategoryRepository
                 .CreateAsync(category);
@@ -69,6 +73,21 @@ namespace Layer.Service.Services.Concrates
             await _manager.SaveAsync();
 
             return _mapper.Map<CategoryDto>(category);
+        }
+
+        public async Task UpdateOneCategoryAsync(
+            CategoryForUpdateDto categoryDto, bool trackChanges)
+        {
+            var category = await 
+                GetOneCategoryCheckExistAsync(categoryDto.Id, trackChanges);
+
+            category = _mapper.Map(categoryDto, category);
+
+            category.UpdatedDate = DateTime.Now;
+            _manager.CategoryRepository.Update(category);
+
+
+            await _manager.SaveAsync();
         }
 
         public async Task DeleteOneCategoryAsync(int id, bool trackChanges)
@@ -80,26 +99,15 @@ namespace Layer.Service.Services.Concrates
 
             await _manager.SaveAsync();
         }
-        public async Task UpdateOneCategoryAsync(CategoryForUpdateDto categoryDto, bool trackChanges)
-        {
-            var category = await 
-                GetOneCategoryCheckExistAsync(categoryDto.Id, trackChanges);
-
-            category = _mapper.Map(categoryDto, category);
-            _manager.CategoryRepository.Update(category);
-
-
-            await _manager.SaveAsync();
-        }
 
         private PaginationMetaData CreateMetaDataForPagination(
-            FeatureParams productParams, int count)
+            FeatureParams categoryParams, int count)
         {
             return new PaginationMetaData()
             {
-                TotalPage =  (int)Math.Ceiling(count/(double)productParams.PageSize),
-                PageSize = productParams.PageSize,
-                CurrentPage = productParams.PageNumber,
+                TotalPage =  (int)Math.Ceiling(count/(double)categoryParams.PageSize),
+                PageSize = categoryParams.PageSize,
+                CurrentPage = categoryParams.PageNumber,
                 TotalCount = count
             };
         }

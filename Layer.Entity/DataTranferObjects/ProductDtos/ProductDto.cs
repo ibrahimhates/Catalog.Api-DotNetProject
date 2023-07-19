@@ -11,6 +11,5 @@ namespace Layer.Entity.DataTranferObjects.ProductDtos
         public bool IsActive { get; init; }
         public DateTime CreatedDate { get; init; }
         public DateTime? UpdatedDate { get; init; }
-        public CategoryDto Category { get; init; }
     }
 }
